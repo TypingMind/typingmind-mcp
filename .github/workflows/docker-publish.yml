@@ -21,7 +21,7 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: ghcr.io
-        username: ${{ github.actor }}
+        username: ${{ github.GITHUB_USERNAME }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build and push Docker image
@@ -29,6 +29,4 @@ jobs:
       with:
         context: .
         push: true
-        tags: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ github.sha }}
-        # You can replace github.sha with 'latest' or a version number if you prefer
-        # For example: tags: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
+        tags: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
