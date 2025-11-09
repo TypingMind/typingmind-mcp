@@ -140,12 +140,43 @@ All API endpoints require authentication via the Bearer token you provide when s
 | `/clients/:id/tools`           | GET    | List available tools for a client                |
 | `/clients/:id/call_tools`      | POST   | Call a tool for a client; body: `{ name, arguments }` |
 | `/clients/:id`                 | DELETE | Stop and delete a client                         |
+| `/mcp-connect`                 | POST   | Proxy fetch requests; body: `{ url, options? }`  |
 
 **Notes:**  
 - All requests need an `Authorization: Bearer <auth-token>` header.
 - Available ports: The server will choose port `50880` or `50881`, make sure
 these ports are available in your system. You can also use `PORT` environment
 variable to specify a different port.
+
+### `/mcp-connect` Endpoint
+
+The `/mcp-connect` endpoint acts as a proxy for fetch requests, allowing you to make HTTP requests through the MCP Connector server. This is useful for connecting to remote MCP servers or making cross-origin requests.
+
+**Request Body:**
+- `url` (required): The URL to fetch
+- `options` (optional): Fetch options object (method, headers, body, etc.)
+
+**Response:**
+- The endpoint streams the response from the target URL, including status code, headers, and body
+- Certain headers are filtered out to prevent decoding issues (Content-Encoding, Content-Length, Transfer-Encoding, and CORS headers)
+- All proxied headers are exposed via `Access-Control-Expose-Headers` for CORS compatibility
+
+**Example:**
+```bash
+curl -X POST http://localhost:50880/mcp-connect \
+  -H "Authorization: Bearer <auth-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://example.com/api/endpoint",
+    "options": {
+      "method": "POST",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": "{\"key\": \"value\"}"
+    }
+  }'
+```
 
 ---
 
