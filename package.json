@@ -1,6 +1,6 @@
 {
   "name": "@typingmind/mcp",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "repository": "https://github.com/TypingMind/typingmind-mcp",
   "description": "Model Context Protocol (MCP) servers runner for TypingMind",
   "main": "lib/server.js",
