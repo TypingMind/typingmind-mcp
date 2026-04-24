@@ -154,6 +154,19 @@ npx @typingmind/mcp@latest <auth-token>
 
 ---
 
+## Restricting to URL-based MCPs
+
+By default, MCP Connector can start MCP servers via either a local `command` (stdio transport) or a remote `url`. The stdio path spawns arbitrary local processes on the host — useful, but it means any caller who can present a valid auth token is effectively able to execute commands on the machine running the connector.
+
+If your deployment only needs to proxy remote MCP servers, you can disable the stdio path entirely by setting the `MCP_URL_ONLY` environment variable to a truthy value (`1`, `true`, or `yes`, case-insensitive). When set, any `/start` or `/restart/:id` request whose config contains a `command` field will be rejected, and only `url`-based MCP clients will be accepted.
+
+```bash
+# Only allow URL-based (remote) MCP servers
+MCP_URL_ONLY=true npx @typingmind/mcp@latest <auth-token>
+```
+
+---
+
 ## REST API Endpoints
 
 All API endpoints require authentication via the Bearer token you provide when starting the server.
